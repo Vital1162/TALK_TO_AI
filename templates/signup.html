@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+<body class= "flex flex-col min-h-screen bg-gray-100 font-sans antialised">
+    <!-- simple navbar -->
+    <nav class = 'bg-black p-4 text-white flex justify-between'>
+        <div clsss="Talk With AI">
+            <a class='text-4xl font-bold' href="">Talk With AI</a>
+        </div>
+    </nav>
+    <!-- content here -->
+    <div class="flex items-center justify-center h-screen">
+        <div class="bg-white p-14 shadow-md rounded-md-100 max-w-md w-full">
+            <form action="" method="POST" class="space-y-4" >
+                {% csrf_token %}
+                <!-- explain for upper here
+                https://stackoverflow.com/questions/5207160/what-is-a-csrf-token-what-is-its-importance-and-how-does-it-work
+                 -->
+                <h2 class="text-xl font-semibold">Đăng kí</h2>
+                <div>
+                    <label for="username" class="block mb-1 font-medium">Tên đăng nhập</label>
+                    <input type="text" id="username" name="username" placeholder="Tên đăng nhập" class="w-full p-2 border-2 border rouneded">
+                </div>
+                <div>
+                    <label for="email" class="block mb-1 font-medium">Email</label>
+                    <input type="text" id="email" name="email" placeholder="Email" class="w-full p-2 border-2 border rouneded">
+                </div>
+                <div>
+                    <label for="password" class="block mb-1 font-medium">Mật khẩu</label>
+                    <input type="text" id="password" name="password" placeholder="Mật khẩu" class="w-full p-2 border-2 border rouneded">
+                    
+                </div>
+                <div>
+                    <label for="repeat_password" class="block mb-1 font-medium">Nhập lại mật khẩu</label>
+                    <input type="password" id="repeat_password" name="repeat_password" placeholder="Nhập lại mật khẩu" class="w-full p-2 border-2 border rouneded">
+                </div>
+
+                <button type="submit" class="w-full bg-black text-white font-semibold p-2 rounded hover:bg-gray-500">ĐĂNG KÍ</button>
+                <div class="flex flex-col space-x-2">
+                    <a class="text-black hover:underline flex justify-center font-semibold" href="login">
+                        Đăng nhập
+                    </a>
+                </div>
+                
+                {% if errors %}
+                    <div class ="text-center text-red-500 text-xl">
+                        {{errors}}
+                    </div>
+                {% endif %}
+                
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+<body>
+    <!-- simple navbar -->
+    <nav class = 'bg-black p-4 text-white flex justify-between'>
+        <div clsss="Talk With AI">
+            <a href="" class='text-4xl font-bold'>Talk With AI</a>
+        </div>
+        <div>
+            <a class="text-white hover:underline" href="#">
+                Đăng xuất
+            </a>
+        </div>
+    </nav>
+    <!-- content -->
+    <br>
+    <br>
+    <div class= "flex-grow container mx-auto mt-10 px-4 sm:px-0">
+        <div class="flex items-center border-2 justify-between bg-white w-full p-6 rounded-md shadow-md transition-transform transform hover:scale-105">
+            <div class="text-2xl font-semibold">
+                <h2>Cuộc trò chuyện 1</h2>
+            </div>
+            <button class="ml-auto">Remove</button>
+        </div>
+        <br>
+        <div id="chatbox" class="p4 h-80 p-2 overflow-y-auto border-2 transition-transform transform hover:scale-105">
+            <!-- your text -->
+            <div class="mb-2 text-right">
+                <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">Hello</p>
+            </div>
+            <!-- bot text -->
+        </div>
+    </div>
+
+
+</body>
+</html>
