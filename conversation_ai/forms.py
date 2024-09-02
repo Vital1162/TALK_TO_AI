@@ -5,3 +5,7 @@ class PromptForm(ModelForm):
     class Meta:
         model = Prompt
         fields = ['prompt']
+
+class Config(ModelForm):
+    class Meta:
+        fields = ['temperature','top_p','top_k','max_output_tokens']

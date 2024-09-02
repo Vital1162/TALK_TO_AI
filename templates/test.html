@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheel Scoring Adjustment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        .slider {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Wheel Scoring Adjustment</h1>
+        <input type="range" id="scoringSlider" class="slider" min="0" max="1" step="0.01" value="0.5">
+        <p>Value: <span id="sliderValue">0.5</span></p>
+    </div>
+
+    <script>
+        const slider = document.getElementById('scoringSlider');
+        const sliderValue = document.getElementById('sliderValue');
+
+        slider.addEventListener('input', function() {
+            sliderValue.textContent = slider.value;
+        });
+    </script>
+</body>
+</html>

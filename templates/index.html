@@ -4,17 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Talk with AI</title>
-    <!-- for taiwind cdn -->
+    <!-- Tailwind CSS -->
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="" href="">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
-<body class= "flex flex-col min-h-screen bg-gray-100 font-sans antialised">
-    <!-- simple navbar -->
-    <nav class = 'bg-black p-4 text-white flex justify-between'>
-        <div>
-            <a href="" class='text-4xl font-bold'>Talk With AI</a>
+<body class="flex flex-col bg-gray-100 font-sans antialiased">
+    <!-- Navbar -->
+    <nav class="bg-black p-4 text-white flex justify-between items-center">
+        <div class="flex items-center">
+            <button id="sidebarToggle" class="mr-4 text-white focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <a href="" class="text-4xl font-bold">Talk With AI</a>
         </div>
-        <div class ="flex space-x-2">
+        <div class="flex space-x-2">
             <a class="text-white hover:underline" href="login">
                 Welcome {{user.username}}
             </a>
@@ -30,54 +36,80 @@
             {% endif %}
         </div>
     </nav>
+
     <!-- Main -->
-    <br>
-    <br>
-    <div class="flex-grow container mx-auto mt-10 px-4 sm:px-0">
-        <div class="max-w-3xl mx-auto bg-white p-6 round-md shadow-md transition-transform transform hover:scale-105 flex flex-col">
-            <div class="text-center">
-                <h2 class="text-2xl font-semibold mb-4">Trò chuyện cùng AI</h2>
-                <p class="text-gray-700">
-                    Được phát triển và fine-tuning nhằm đào tạo một mô hình có khả năng giao tiếp với người dùng.
-                </p>
-            </div>
-            <br>
-            <!-- text generation -->
-            <div id='chatbox' class="p4 h-80 p-2 overflow-y-auto border">
-                {% for prompt in prompts %}
-                    <div class="mb-2 text-right">
-                        <!-- user prompt -->
-                        <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">{{ prompt.prompt }}</p>
-                    </div>
-                    <!-- AI response -->
-                    <div class="mb-2">
-                        <p class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">{{ prompt.response }}</p>
+    <div class="flex">
+        
+        <!-- Sidebar -->
+        <div id="sidebar" class="w-64 bg-white h-screen p-4 border border-black fixed transition-all duration-300 transform z-10">
+            <form id="config" method="POST" class="space-y-4">
+                {% csrf_token %}
+                <h2 class="text-xl font-semibold">Điều chỉnh</h2>
+                <div class="space-y-2">
+                    <label for="max_output_tokens">Tokens đầu ra:</label>
+                    <input type="number" value=512 id="max_output_tokens" name="max_output_tokens" class="border-2 border-black rounded w-full px-2">
+
+                    <label for="temperature" class="flex justify-between">
+                        Temperature: <span id="temp_value" class="ml-2">0.5</span>
+                    </label>
+                    <input type="range" id="temperature" name="temperature" min=0 max=1 step=0.01 value=0.5 class="w-full">
+
+                    <label for="top_p" class="flex justify-between">
+                        Top_p: <span id="top_p_value" class="ml-2">0.9</span>
+                    </label>
+                    <input type="range" id="top_p" name="top_p" min=0 max=1 step=0.01 value=0.9 class="w-full">
+
+                    <label for="top_k">Top-K:</label>
+                    <input type="number" value=60 id="top_k" name="top_k" class="border-2 border-black rounded w-full px-2">
                 </div>
-            {% endfor %}
-            </div>
-            <!-- prompt -->
-            <div>
+            </form>
+        </div>
+
+        <!-- Content Area -->
+        <div id="content_area" class="flex-grow container mx-auto mt-10 px-4 sm:px-0">
+            <div class="max-w-3xl mx-auto bg-white p-6 rounded-md shadow-md transition-transform transform hover:scale-105 flex flex-col">
+                <div class="text-center">
+                    <h2 class="text-2xl font-semibold mb-4">Trò chuyện cùng AI</h2>
+                    <p class="text-gray-700">
+                        Được phát triển và fine-tuning nhằm đào tạo một mô hình có khả năng giao tiếp với người dùng.
+                    </p>
+                </div>
+                <br>
+                <!-- Text Generation -->
+                <div id="chatbox" class="p-4 h-80 p-2 overflow-y-auto border">
+                    {% for prompt in prompts %}
+                        <div class="mb-2 text-right">
+                            <!-- User Prompt -->
+                            <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">{{ prompt.prompt }}</p>
+                        </div>
+                        <!-- AI Response -->
+                        <div class="mb-2">
+                            <p class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">{{ prompt.response }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Prompt Input -->
                 <div>
                     <h2 class="text-xl mb-4 font-semibold">Prompt</h2>
-                    <div class = "relative space-x-4">
-                    <form action="{% url 'addPrompt' %}" method="POST">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <input id="user-prompt" type="text" placeholder="Tin nhắn của tôi" class="w-full p-2 border border-black round-md" name = "prompt">
-                        <button type="submit" class="absolute right-2 p-2" id="sent_messages" onclick="sent" >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m15 11.25-3-3m0 0-3 3m3-3v7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                        </button>
-                    </form>
+                    <div class="relative space-x-4">
+                        <form id="form" method="POST">
+                            {% csrf_token %}
+                            <!-- {{ form.as_p }} -->
+                            <input id="user-prompt" type="text" placeholder="Tin nhắn của tôi" class="w-full p-2 border border-black rounded-md" name="prompt">
+                            <button type="submit" class="absolute right-2 p-2" id="sent_messages">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m15 11.25-3-3m0 0-3 3m3-3v7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     {% load static %}
-        <script type="text/javascript" src="{% static 'index.js' %}"></script>
-
-
+    <script src="{% static 'index.js' %}"></script>
+    <script src="{% static 'font.js' %}"></script>
 </body>
 </html>
