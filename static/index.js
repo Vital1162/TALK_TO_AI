@@ -22,7 +22,7 @@ chatSocket.onmessage = function(e) {
                 .then(response => {
                     const reader = response.body.getReader();
                     const decoder = new TextDecoder();
-    
+                    
                     function typeEffect(element, text) {
                         let index = 0;
                         const speed = 50; // Speed of typing effect in milliseconds
@@ -109,3 +109,23 @@ if (form) {
 } else {
     console.log("id 'form' not found in the DOM.");
 }
+
+
+
+// let socket = new WebSocket('ws://' + window.location.host + '/ws/conversations/');
+
+// socket.onmessage = function(e) {
+//     let data = JSON.parse(e.data);
+//     let conversationList = document.getElementById('chat_history');
+//     let newElement = document.createElement('div');
+//     newElement.innerText = data.response;
+//     conversationList.appendChild(newElement);
+// };
+
+// // Optional: Send a message to the server (if needed)
+// function sendMessage(message) {
+//     socket.send(JSON.stringify({
+//         'message': message
+//     }));
+// }
+

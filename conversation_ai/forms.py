@@ -9,3 +9,7 @@ class PromptForm(ModelForm):
 class Config(ModelForm):
     class Meta:
         fields = ['temperature','top_p','top_k','max_output_tokens']
+        
+# class ConversationForm(ModelForm):
+#     class Meta:
+#         fields = ['response','start_time','end_time']
